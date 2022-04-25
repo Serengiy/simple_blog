@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+<title>Пост</title>
+{% block content %}
+
+<div class="container">
+  <div class="row p-5">
+    <h1>{{ object.title}}</h1>
+    <p>{{ object.text}}</p>
+    <h4>{{ object.author}}</h4>
+    <h4>{{ object.date}}</h4>
+  </div>
+  <div class="row p-5">
+    <h4>Comments:</h4>
+    {% for comment in comments %}
+    <div class="container mt-3">
+
+      <div class="row d-flex justify-content-left">
+        <div class="col-md-8">
+          <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="user d-flex flex-row align-items-center"> <span><small class="font-weight-bold text-primary">{{comment.author}}:</small> <small class="font-weight-bold">{{comment.text}}</small></span> </div> <small>{{comment.date}}</small>
+            </div>
+</div>
+            {% if user.pk == comment.author.pk %}
+            <form id='delete' action="{% url 'comments:delete' pk=comment.pk p_pk=post.pk%}" method="post"> {% csrf_token %}
+
+              <div class="action d-flex justify-content-between mt-2 align-items-center"></div>
+            </form>
+            <p>
+              <button form='delete' type="submit" class="btn btn-secondary btn-sm">Удалить</button>
+              <!-- <div class="icons align-items-center"> <i class="fa fa-star text-warning"></i> <i class="fa fa-check-circle-o check-icon"></i> </div> -->
+
+              <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Изменить
+              </button>
+
+            </p>
+          <form id='update_form' action="{% url 'comments:update' pk=comment.pk p_pk=post.pk%}" method="post">{% csrf_token %}
+            <div class="collapse" id="collapseExample">
+              <div class="card card-body">
+                <textarea name="text" rows="8" cols="80">{{comment.text}}</textarea>
+              </div>
+              <button form='update_form' type="submit" class="btn btn-secondary btn-sm">Изменить</button>
+            </div>
+          </form>
+          {% endif %}
+        </div>
+        </div>
+        </div>
+    {% endfor %}
+  </div>
+  <br>
+  <br>
+  <br>
+  <div class="row d-flex justify-content-left">
+    <div class="col-md-12">
+      {% if user.is_authenticated %}
+      <div class="card-footer col-md-8 pb-4 border-0" style="background-color: #f8f9fa;">
+        <p>{{user.username}}:</p>
+        <div class="d-flex flex-start w-100">
+          <div class="form-outline w-100">
+            <form action="{% url 'comments:add' pk=object.pk %}" method='post' id="form1"> {% csrf_token %}
+              <input type="hidden" name="author" value="{{ user.pk }}">
+              <input type="hidden" name="post" value="{{ object.pk }}">
+              {{form.text}}
+              <label class="form-label" for="textAreaExample">Message</label>
+            </form>
+          </div>
+        </div>
+        <div class="float-end mt-2 pt-1">
+          <button form="form1" type="submit" class="btn btn-primary btn-sm">Post comment</button>
+        </div>
+      </div>
+      <br><br>
+    </div>
+  </div>
+  {% endif %}
+
+
+  <!--  -->
+
+
+
+  {% endblock %}
