@@ -11,11 +11,9 @@ class Profile(models.Model):
     phone = models.IntegerField(null=True)
     photo = models.ImageField(upload_to='static/images/', null=True, blank=True)
     address = models.CharField(max_length=300, null=True)
-    # is_male = models.BooleanField(null=True)
 
     def __str__(self):
         return str(self.user)
-
 
 
 class EditUserForm(forms.ModelForm):
@@ -32,7 +30,6 @@ class EditUserForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('photo', 'address', 'phone',)
-
 
 
 class UserLoginForm(forms.Form):
@@ -80,11 +77,9 @@ class UserRegistrationForm(forms.ModelForm):
         'placeholder': 'Подтвердите пароль'
     }))
 
-
-
     class Meta:
         model = User
-        fields = ('username', )
+        fields = ('username',)
 
     def clean_password2(self):
         data = self.cleaned_data
