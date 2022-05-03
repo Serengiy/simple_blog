@@ -1,10 +1,38 @@
-import platform
-
+from django.db import models
 from django import forms
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.hashers import check_password
 
 User = get_user_model()
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    phone = models.IntegerField(null=True)
+    photo = models.ImageField(upload_to='static/images/', null=True, blank=True)
+    address = models.CharField(max_length=300, null=True)
+    # is_male = models.BooleanField(null=True)
+
+    def __str__(self):
+        return str(self.user)
+
+
+
+class EditUserForm(forms.ModelForm):
+    photo = forms.FileField(widget=forms.FileInput(attrs={
+        'class': 'form-control'
+    }))
+    phone = forms.IntegerField(label='phone', widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }))
+    address = forms.CharField(label='address', widget=forms.Textarea(attrs={
+        'class': 'form-control'
+    }))
+
+    class Meta:
+        model = Profile
+        fields = ('photo', 'address', 'phone',)
+
 
 
 class UserLoginForm(forms.Form):
@@ -51,6 +79,8 @@ class UserRegistrationForm(forms.ModelForm):
         'class': 'form-control',
         'placeholder': 'Подтвердите пароль'
     }))
+
+
 
     class Meta:
         model = User

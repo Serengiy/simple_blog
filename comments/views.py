@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DeleteView, UpdateView
 from comments.forms import CommentForm
@@ -12,13 +11,11 @@ def add_comment(request, pk):
         form = CommentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('posts:detail', kwargs={'pk':pk}))
-
+            return redirect(reverse('posts:detail', kwargs={'pk': pk}))
 
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     model = Comment
-    # success_url = reverse_lazy('detail/')
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)

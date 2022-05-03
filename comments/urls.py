@@ -1,5 +1,4 @@
 from comments.views import CommentDeleteView, CommentUpdateView, add_comment
-from posts.views import *
 from django.urls import path
 
 app_name = 'comments'

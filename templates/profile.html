@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title%}Личный профиль{% endblock %}
+{% block content%}
+<div class="container">
+  <div class="main-body">
+
+    <div class="row gutters-sm">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              {% if username.profile.photo %}
+              <img src="{{ username.profile.photo.url }}" alt="Admin" class="rounded-circle" width="150">
+              {% else %}
+              <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+              {% endif %}
+              <div class="mt-3">
+                <h4>{{username.username}}</h4>
+                <p class="text-muted font-size-sm">{{username.profile.address}}</p>
+                <!-- <button class="btn btn-primary">Follow</button>
+                      <button class="btn btn-outline-primary">Message</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Full Name</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                {{username.get_full_name}}
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Email</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                {{username.email}}
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Phone</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                {{username.profile.phone}}
+              </div>
+            </div>
+            <hr>
+
+
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Address</h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                {{username.profile.address}}
+              </div>
+            </div>
+            {% if username == user %}
+            <hr>
+            <div class="row">
+              <div class="col-sm s-3">
+                <a class="btn btn-info me-3" target="__blank" href="{% url 'accounts:profile_edit' pk=user.profile.pk%}">Edit</a>
+                <a class="btn btn-info" target="__blank" href="{% url 'posts:create' %}">Создать пост</a>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="row gutters-sm">
+          {% for post in page_obj %}
+          <h2><a href="{% url 'posts:detail' pk=post.pk %}">{{post.title}}</a></h2>
+          <p>{{post.text|slice:":255"}}...</p>
+
+          <div class="row">
+            <div class="col">
+              <h6>{{post.date}}</h6>
+            </div>
+            <div class="col">
+              {% if user == username %}
+              <a class="me-3" href="{% url 'posts:update' pk=post.pk %}">Редактировать</a>
+              <a href="{% url 'posts:delete' pk=post.pk %}">Удалить</a>
+              {% endif %}
+            </div>
+
+          </div>
+          {% endfor %}
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center pagination-sm">
+              <li class="page-item">
+                {% if page_obj.has_previous %}
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+                {% endif %}
+              </li>
+
+              {% for page in page_obj.paginator.page_range %}
+              <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+                <a class="page-link" href="?page={{page}}">
+                  {{ page }}
+                </a>
+              </li>
+              {% endfor %}
+
+              <li class="page-item">
+                {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Previous">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+                {% endif %}
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%endblock%}

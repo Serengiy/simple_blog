@@ -8,7 +8,6 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE,)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, )
-    # reply_to = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
 
     class Meta:
         ordering = ['date']

@@ -2,27 +2,58 @@
 {% block title %}Все посты{% endblock %}
 {% block content %}
 
-<div class="container">
+<div class="container  py-2">
 <div class="row justify-content-md-center">
-  <div class="col-md-8">
-  {% for post in posts %}
-  <div class="py-5">
+  <div class="col-lf-2">
+  </div>
+    <div class="col-8">
+    {% for post in page_obj %}
 
-  <h2><a href="{% url 'posts:detail' pk=post.pk%}">{{post.title}}</a></h2>
-  <p>{{post.text}}</p>
-  <div class="row">
-    <div class="col">
-      <h6>{{post.date}}</h6>
+    <h2><a href="{% url 'posts:detail' pk=post.pk%}">{{post.title}}</a></h2>
+
+  <p>{{post.text|slice:":255"}}...</p>
+
+    <div class="row">
+      <div class="col">
+        <h6>{{post.date}}</h6>
+      </div>
+      <div class="col">
+        <h6>Автор: <a href="{% url 'profile' username=post.author %}">{{post.author}}</a></h6>
+      </div>
     </div>
-    <div class="col">
-      <h6>Автор: <a href="#">{{post.author}}</a></h6>
+    {% endfor %}
     </div>
-  </div>
-  </div>
-  {% endfor %}
-  </div>
   </div>
 </div>
+<hr>
+<br>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      {% if page_obj.has_previous %}
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+      {% endif %}
+    </li>
+
+    {% for page in page_obj.paginator.page_range %}
+    <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+      <a class="page-link" href="?page={{page}}">
+        {{ page }}
+      </a>
+    </li>
+    {% endfor %}
+
+    <li class="page-item">
+      {% if page_obj.has_next %}
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+      {% endif %}
+    </li>
+  </ul>
+</nav>
 
 
 

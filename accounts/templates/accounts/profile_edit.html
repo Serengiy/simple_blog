@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование профиля{% endblock %}
+{% block content %}
+<br>
+<div class="container">
+  <div class="col-6">
+<form action="{% url 'accounts:profile_edit'  pk=user.pk %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+
+<div class="row">
+<div class="col">
+  <input type="text" class="form-control" name='first_name' placeholder="Имя" value={{object.user.first_name}}>
+</div>
+<div class="col">
+  <input type="text" class="form-control" name='last_name' placeholder="Фамилия" value={{object.user.last_name}}>
+</div>
+</div>
+<br>
+{{form.photo}}
+<br>
+{{form.phone}}
+<br>
+{{form.address}}
+<br>
+  <!-- <form action="{% url 'accounts:profile_edit' pk=user.pk %}" accept-charset="utf-8" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="form-group row">
+      <div class="col">
+        <input type="text" class="form-control" name='first_name' placeholder="Имя" value={{author.first_name}}>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" name='last_name' placeholder="Фамилия" value={{author.last_name}}>
+      </div>
+      </div>
+<br>
+      <input type="text" class="form-control" name='phone' placeholder='Телефон' value={{author.profile.phone}}>
+      <br>
+      <input type="text" class="form-control" name='address' placeholder="Адрес" value={{author.profile.address}}>
+      <br>
+      <input type="file" class="form-control" name='photo'>
+      <br>
+      <input type="hidden" class="form-control" name='user' value={{author.pk}}>
+      <br><br>
+</form> -->
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+</div>
+{% endblock %}

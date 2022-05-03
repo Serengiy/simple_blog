@@ -11,7 +11,6 @@ class CommentForm(forms.ModelForm):
     }))
     author = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
     post = forms.ModelChoiceField(queryset=Post.objects.all(), widget=forms.HiddenInput())
-    # data = forms.DateTimeField(widget=forms.HiddenInput())
 
     class Meta:
         model = Comment
